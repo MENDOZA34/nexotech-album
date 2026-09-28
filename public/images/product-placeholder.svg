@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
+  <title id="title">Marcador visual de producto</title>
+  <desc id="desc">Imagen temporal para fichas sin fotografía con permiso de reutilización verificado.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#151722"/>
+      <stop offset="0.45" stop-color="#1d2132"/>
+      <stop offset="1" stop-color="#11131b"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="640" fill="url(#g)"/>
+  <path d="M0 512h960v128H0z" fill="#080a0f"/>
+  <path d="M102 96h756a28 28 0 0 1 28 28v392a28 28 0 0 1-28 28H102a28 28 0 0 1-28-28V124a28 28 0 0 1 28-28z" fill="#0f111a" stroke="#ff2358" stroke-width="6"/>
+  <path d="M168 192h624v76H168zM168 318h438v36H168zM168 382h540v36H168z" fill="#ff2358" opacity=".92"/>
+  <circle cx="760" cy="386" r="84" fill="#18e0ff" opacity=".86"/>
+  <path d="M728 386h64M760 354v64" stroke="#091017" stroke-width="18" stroke-linecap="round"/>
+  <text x="480" y="576" text-anchor="middle" fill="#f4f7fb" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700">IMAGEN PENDIENTE DE VERIFICACIÓN</text>
+</svg>
