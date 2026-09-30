@@ -237,7 +237,8 @@ h3 {
 .product-type,
 .source-list span,
 .source-table th,
-.spec-list dt {
+.spec-list dt,
+.academic-list dt {
   color: var(--muted);
   font-size: 0.82rem;
   text-transform: uppercase;
@@ -521,17 +522,33 @@ h3 {
 }
 
 .product-body dl,
-.spec-list {
+.spec-list,
+.academic-list {
   display: grid;
   gap: 8px;
   margin: 0;
 }
 
 .product-body dl div,
-.spec-list div {
+.spec-list div,
+.academic-list div {
   display: grid;
   grid-template-columns: 120px 1fr;
   gap: 10px;
+}
+
+.academic-panel {
+  border-color: rgba(24, 224, 255, 0.28);
+}
+
+.academic-list div {
+  grid-template-columns: 150px 1fr;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.academic-list div:last-child {
+  border-bottom: 0;
 }
 
 dd {
@@ -641,7 +658,7 @@ dd {
 .compare-table,
 .source-table {
   width: 100%;
-  min-width: 680px;
+  min-width: 900px;
   border-collapse: collapse;
 }
 
@@ -662,6 +679,11 @@ dd {
 .compare-table .difference td,
 .compare-table .difference th {
   background: rgba(255, 35, 88, 0.12);
+}
+
+.source-table span {
+  color: var(--muted);
+  font-size: 0.86rem;
 }
 
 .comparison-list {

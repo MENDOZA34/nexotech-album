@@ -23,7 +23,11 @@ const money = (price) => {
   if (!price || price.status === "pendiente") return "Precio por confirmar";
   if (String(price.amount).toLowerCase() === "pendiente") return "Precio por confirmar";
   if (String(price.amount).toLowerCase() === "varía") return "Precio variable";
-  return `${price.currency} ${price.amount}`;
+  const currencyLabels = {
+    GTQ: "Q",
+    USD: "US$",
+  };
+  return `${currencyLabels[price.currency] || price.currency} ${price.amount}`;
 };
 
 const visualProfiles = {
@@ -68,6 +72,15 @@ function imageCredit(product) {
   return "Visual generado por categoría para identificar el tipo de producto. No es una fotografía del modelo.";
 }
 
+const academicLabels = {
+  universidad: "Universidad",
+  curso: "Curso",
+  docente: "Ingeniero/docente",
+  integrantes: "Integrantes",
+  carnes: "Carnés",
+  fechaEntrega: "Fecha de entrega",
+};
+
 const escapeHtml = (value) =>
   String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -110,6 +123,12 @@ function renderHome() {
       `;
     })
     .join("");
+  const academicRows = Object.entries(academicLabels)
+    .map(([key, label]) => {
+      const value = siteMeta.academicFields[key] || "EDITAR";
+      return `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`;
+    })
+    .join("");
 
   return layout(`
     <section class="hero">
@@ -120,6 +139,16 @@ function renderHome() {
           ${link("#/catalogo", "Explorar catálogo", "button primary")}
           ${link("#/comparador", "Comparar dos productos", "button")}
         </div>
+      </div>
+    </section>
+    <section class="section split">
+      <div>
+        <h2>Objetivo del álbum</h2>
+        <p>Presentar un catálogo comparativo de productos tecnológicos reales, con características, usos recomendados, precios de referencia, fuentes y explicaciones sencillas para apoyar una exposición universitaria.</p>
+      </div>
+      <div class="panel academic-panel">
+        <h2>Datos editables del trabajo</h2>
+        <dl class="academic-list">${academicRows}</dl>
       </div>
     </section>
     <section class="section">
@@ -274,6 +303,10 @@ function renderProduct(id) {
           <span>${escapeHtml(product.verified === "parcial" ? "Verificación parcial" : "Verificado")}</span>
           <span>Consulta: ${escapeHtml(product.price.date)}</span>
         </div>
+        <div class="hero-actions">
+          ${link("#/catalogo", "Volver al catálogo", "button")}
+          ${link("#/comparador", "Abrir comparador", "button primary")}
+        </div>
       </div>
     </section>
     <section class="detail-grid">
@@ -418,13 +451,26 @@ function renderGuide() {
 }
 
 function renderSources() {
-  const allSources = products.flatMap((product) =>
-    product.sources.map((item) => ({
-      ...item,
-      product: `${product.brand} ${product.model}`,
-      id: product.id,
-    }))
-  );
+  const sourceRows = products
+    .map((product) => {
+      const specLinks = product.sources
+        .map((item) => `<a href="${item.url}" target="_blank" rel="noreferrer">${escapeHtml(item.title)}</a>`)
+        .join("<br>");
+      const priceSource = product.price.sourceUrl
+        ? `<a href="${product.price.sourceUrl}" target="_blank" rel="noreferrer">${escapeHtml(product.price.sourceName)}</a>`
+        : escapeHtml(product.price.sourceName);
+      return `
+        <tr>
+          <td><a href="#/producto/${product.id}">${escapeHtml(product.brand)} ${escapeHtml(product.model)}</a></td>
+          <td>${escapeHtml(product.brand)}</td>
+          <td>${specLinks}</td>
+          <td>${priceSource}<br><span>${escapeHtml(money(product.price))} · ${escapeHtml(product.price.market)} · ${escapeHtml(product.price.date)}</span></td>
+          <td>${escapeHtml(imageCredit(product))}</td>
+        </tr>
+      `;
+    })
+    .join("");
+  const sourceCount = products.reduce((count, product) => count + product.sources.length, 0);
   const pendingImages = products.filter((product) => product.image.status.includes("pendiente")).length;
   const pendingPrices = products.filter((product) => product.price.status === "pendiente").length;
 
@@ -434,7 +480,7 @@ function renderSources() {
       <p>Cada ficha conserva sus fuentes y muestra con claridad cuándo un precio o una imagen todavía no está confirmado.</p>
     </section>
     <section class="notice-grid">
-      <div><strong>${allSources.length}</strong><span>fuentes enlazadas</span></div>
+      <div><strong>${sourceCount}</strong><span>fuentes enlazadas</span></div>
       <div><strong>${pendingImages}</strong><span>visuales sin foto verificada</span></div>
       <div><strong>${pendingPrices}</strong><span>precios por confirmar</span></div>
     </section>
@@ -445,11 +491,9 @@ function renderSources() {
     </section>
     <section class="source-table-wrap">
       <table class="source-table">
-        <thead><tr><th>Producto</th><th>Tipo</th><th>Fuente</th></tr></thead>
+        <thead><tr><th>Producto</th><th>Fabricante</th><th>Especificaciones</th><th>Precio</th><th>Imagen/crédito</th></tr></thead>
         <tbody>
-          ${allSources
-            .map((item) => `<tr><td><a href="#/producto/${item.id}">${escapeHtml(item.product)}</a></td><td>${escapeHtml(item.type)}</td><td><a href="${item.url}" target="_blank" rel="noreferrer">${escapeHtml(item.title)}</a></td></tr>`)
-            .join("")}
+          ${sourceRows}
         </tbody>
       </table>
     </section>
@@ -469,6 +513,16 @@ function slides() {
       meta: "Aplica a computadoras, laptops y celulares.",
     },
     {
+      title: "Categorías del catálogo",
+      body: "El catálogo reúne computadoras de escritorio, laptops, celulares, tablets, almacenamiento, componentes internos, periféricos, otros equipos, consolas y placas de desarrollo.",
+      meta: "La validación local confirma 93 productos.",
+    },
+    {
+      title: "Productos destacados",
+      body: "Las fichas combinan modelo exacto, gama, características técnicas, ventajas, limitaciones, uso recomendado, precio referencial y fuentes.",
+      meta: "Cuando falta una foto o precio fiable, la ficha lo declara como pendiente.",
+    },
+    {
       title: "Almacenamiento",
       body: "HDD guarda mucho por bajo costo. SSD SATA acelera equipos antiguos. SSD NVMe aprovecha PCI Express para máxima velocidad.",
       meta: "SATA es interfaz; HDD y SSD son tecnologías de almacenamiento.",
@@ -484,9 +538,19 @@ function slides() {
       meta: "Se parecen en educación, pero resuelven problemas distintos.",
     },
     {
+      title: "Guía de conceptos",
+      body: "La guía traduce términos como CPU, GPU, RAM, almacenamiento, interfaces, pantallas, conectividad y placas de desarrollo a lenguaje sencillo.",
+      meta: "Sirve como apoyo para explicar especificaciones durante la exposición.",
+    },
+    {
       title: "Elegir con criterio",
       body: "Las comparaciones muestran que no siempre gana el modelo más caro: conviene partir del uso, revisar límites y confirmar precio, compatibilidad y fuentes.",
       meta: "La mejor opción depende de tus necesidades reales.",
+    },
+    {
+      title: "Fuentes",
+      body: "La sección de fuentes permite rastrear fabricante, especificaciones, precio e imagen de cada producto.",
+      meta: "Los precios son referencias y pueden cambiar.",
     },
   ];
 }
@@ -577,4 +641,15 @@ function bindEvents() {
 }
 
 window.addEventListener("hashchange", render);
+window.addEventListener("keydown", (event) => {
+  if (route() !== "/presentacion") return;
+  if (event.key === "ArrowLeft") {
+    state.slide -= 1;
+    render();
+  }
+  if (event.key === "ArrowRight") {
+    state.slide += 1;
+    render();
+  }
+});
 render();

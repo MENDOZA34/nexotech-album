@@ -1,10 +1,12 @@
 export const siteMeta = {
   title: "NexoTech",
-  subtitle: "Explora, entiende y compara tecnología",
+  subtitle: "Álbum Tecnológico Comparativo para explorar, entender y comparar tecnología real.",
   academicFields: {
     universidad: "EDITAR: Nombre de la universidad",
     curso: "EDITAR: Nombre del curso",
+    docente: "EDITAR: Nombre del ingeniero/docente",
     integrantes: "EDITAR: Integrante 1, Integrante 2, Integrante 3",
+    carnes: "EDITAR: Carné 1, Carné 2, Carné 3",
     fechaEntrega: "EDITAR: Fecha de entrega",
   },
   dataDate: "2026-09-28",

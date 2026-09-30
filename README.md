@@ -1,8 +1,14 @@
 # NexoTech
 
-Sitio web estático de tecnología. Incluye catálogo, fichas detalladas, filtros, búsqueda, comparador de dos productos del mismo tipo, análisis breves, guía de conceptos, fuentes y modo presentación.
+NexoTech es un sitio web estático para el trabajo universitario **Álbum Tecnológico Comparativo**. Incluye catálogo, fichas detalladas, búsqueda, filtros combinables, comparador, comparaciones educativas, guía de conceptos, fuentes y modo presentación.
 
-## Comandos
+## Requisitos
+
+- Node.js 20 o superior.
+- npm.
+- Un navegador moderno.
+
+## Comandos locales
 
 ```bash
 npm install
@@ -24,94 +30,114 @@ npm.cmd run preview
 
 ## Estructura principal
 
-- `src/data/products.js`: fichas del catálogo. Aquí se editan productos, precios, fuentes, características e imágenes.
-- `src/data/concepts.js`: guía de conceptos y análisis breves.
-- `src/data/siteMeta.js`: título, lema, datos opcionales, avisos de precios e imágenes.
-- `src/main.js`: construye las pantallas a partir de los datos.
-- `src/styles.css`: diseño visual responsive.
-- `public/images/product-placeholder.svg`: marcador usado cuando no hay fotografía con permiso verificado.
-- `scripts/check-data.js`: valida cantidades, campos obligatorios y número de características.
-
-## Editar datos opcionales
-
-Abre `src/data/siteMeta.js` y cambia estos campos si más adelante quieres mostrarlos en alguna sección:
-
-```js
-academicFields: {
-  universidad: "EDITAR: Nombre de la universidad",
-  curso: "EDITAR: Nombre del curso",
-  integrantes: "EDITAR: Integrante 1, Integrante 2, Integrante 3",
-  fechaEntrega: "EDITAR: Fecha de entrega",
-}
+```text
+nexotech-album/
+├── public/
+│   └── images/              Imágenes verificadas o marcadores visuales.
+├── scripts/
+│   └── check-data.js        Valida cantidades, tipos y campos obligatorios.
+├── src/
+│   ├── data/
+│   │   ├── concepts.js      Guía de conceptos y comparaciones preparadas.
+│   │   ├── products.js      Catálogo editable de productos.
+│   │   └── siteMeta.js      Datos generales y campos académicos editables.
+│   ├── main.js              Renderiza vistas, rutas, filtros y comparador.
+│   └── styles.css           Diseño responsive de NexoTech.
+├── index.html
+├── package.json
+├── vite.config.js
+└── README.md
 ```
 
-## Añadir o corregir un producto
+## Cómo funciona
+
+Los productos están en `src/data/products.js` como objetos JavaScript. `src/main.js` importa ese arreglo, lo filtra según la búsqueda o los selectores, y convierte cada producto en tarjetas del catálogo. Cuando se abre una ficha, la ruta `#/producto/id-del-producto` busca el producto por `id` y muestra sus características, precio, ventajas, limitaciones, uso recomendado y fuentes.
+
+## Agregar o modificar productos
+
+Para agregar un producto:
 
 1. Abre `src/data/products.js`.
-2. Copia una ficha `p({ ... })` de la misma categoría o tipo.
-3. Cambia `id`, `category`, `type`, `brand`, `model`, `description`, `specs`, `advantages`, `limitations`, `recommendedUse` y `sources`.
-4. Mantén `specs` entre 4 y 6 filas.
-5. Ejecuta `npm.cmd run check:data` para confirmar que no se rompen cantidades o campos.
+2. Copia una ficha `p({ ... })` de una categoría parecida.
+3. Cambia `id`, `category`, `type`, `brand`, `model`, `range`, `description`, `specs`, `advantages`, `limitations`, `recommendedUse` y `sources`.
+4. Mantén `specs` entre 4 y 6 características.
+5. Ejecuta `npm.cmd run check:data`.
 
-## Cambiar precio o fuente
+Para eliminar un producto, borra su bloque `p({ ... })` y revisa si la categoría queda incompleta. El proyecto espera 93 productos exactos.
 
-En la ficha, edita el bloque `price`.
-
-Para precio referencial:
+Para corregir una característica, edita el arreglo `specs` dentro de la ficha:
 
 ```js
-price: refPrice("3,499", "GTQ", "Guatemala", "Nombre de tienda", "https://enlace-a-la-fuente")
+specs: [
+  ["Procesador", "Dato corregido"],
+  ["Memoria", "Dato corregido"],
+]
 ```
 
-Para dato pendiente:
+## Precios y fuentes
+
+Para cambiar un precio, edita el bloque `price` de la ficha en `src/data/products.js`.
+
+Precio referencial:
+
+```js
+price: refPrice("4,999", "GTQ", "Guatemala", "Nombre de tienda", "https://enlace-real")
+```
+
+Precio pendiente:
 
 ```js
 price: pendingPrice("Guatemala")
 ```
 
-Agrega siempre la fuente también en `sources`.
+La fecha de consulta se controla con la constante `checked` al inicio de `src/data/products.js`. Si solo una ficha necesita otra fecha, puedes añadirla directamente dentro del objeto `price`.
 
-## Cambiar imagen
+Para agregar o corregir una fuente, edita `sources`:
 
-Guarda la imagen permitida dentro de `public/images/`, idealmente optimizada en `.webp` o `.jpg`. Luego reemplaza el bloque `image` de la ficha:
+```js
+sources: [
+  source("Fabricante - página oficial", "https://enlace-real"),
+  source("Tienda - precio consultado", "https://enlace-real", "Precio local")
+]
+```
+
+## Imágenes
+
+Guarda imágenes verificadas en `public/images/`. Luego edita el bloque `image` del producto:
 
 ```js
 image: {
-  src: "./images/nombre-del-archivo.webp",
+  src: "./images/nombre-del-archivo.jpg",
   alt: "Foto del producto Marca Modelo",
   status: "verificada",
-  credit: "Crédito o licencia de la imagen",
+  credit: "Crédito o fuente de imagen",
 }
 ```
 
-No uses fotografías sin permiso claro de reutilización.
+Si no hay una imagen verificable, deja el marcador pendiente. No uses fotografías de otro modelo ni imágenes sin permiso claro.
 
-## Publicar en GitHub Pages
+## Datos académicos
 
-1. Crea un repositorio en tu cuenta de GitHub.
-2. En esta carpeta ejecuta:
+Edita `src/data/siteMeta.js` para cambiar universidad, curso, docente, integrantes, carnés y fecha de entrega. Esos campos aparecen en la página de inicio.
+
+## GitHub Pages
+
+El proyecto usa rutas hash (`#/catalogo`) y `base: "./"` en `vite.config.js`, por lo que la compilación funciona dentro de una ruta de repositorio como `/nexotech-album/`.
+
+Para publicar posteriormente, puedes usar una de estas opciones:
+
+1. Compilar localmente con `npm run build` y publicar `dist/` con la configuración que prefieras.
+2. Crear después un workflow de GitHub Actions que ejecute `npm ci`, `npm run check:data` y `npm run build`, y publique `dist/`.
+
+## Subir cambios a GitHub
+
+Cuando ya revises el proyecto local, los comandos habituales serían:
 
 ```bash
-git init
+git status
 git add .
-git commit -m "Crear NexoTech"
-git branch -M main
-git remote add origin https://github.com/TU-USUARIO/TU-REPOSITORIO.git
-git push -u origin main
+git commit -m "Completar álbum tecnológico comparativo"
+git push
 ```
 
-3. En GitHub entra a `Settings > Pages`.
-4. En `Build and deployment`, elige `GitHub Actions`.
-5. El proyecto ya incluye `.github/workflows/deploy.yml`. Cuando hagas `push` a `main`, GitHub ejecutará `npm ci`, `npm run check:data`, `npm run build` y publicará `dist/`.
-
-El proyecto usa `base: "./"` y rutas con hash (`#/catalogo`), por eso funciona aunque GitHub Pages lo sirva bajo `https://usuario.github.io/repositorio/`.
-
-## Verificación local sugerida
-
-```powershell
-npm.cmd run check:data
-npm.cmd run build
-npm.cmd run preview
-```
-
-Después abre la URL que muestre Vite y revisa catálogo, filtros, fichas, comparador, presentación y vista móvil.
+No ejecutes `git push` hasta revisar los cambios.

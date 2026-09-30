@@ -86,6 +86,12 @@ export const products = [
     type: "Escritorio gama alta",
     brand: "Dell Alienware",
     model: "Area-51 Gaming Desktop",
+    image: {
+      src: "./images/Alienware-Area-51.jpg",
+      alt: "Dell Alienware Area-51 Gaming Desktop",
+      status: "verificada",
+      credit: "Imagen local del proyecto: Alienware-Area-51.jpg",
+    },
     range: "Alta",
     description:
       "Torre gaming entusiasta con configuraciones de GPU de nueva generación y fuente de alta potencia.",
@@ -116,6 +122,12 @@ export const products = [
     type: "Escritorio gama alta",
     brand: "HP",
     model: "OMEN 45L Gaming Desktop",
+    image: {
+      src: "./images/HP OMEN 45L Gaming.jpg",
+      alt: "HP OMEN 45L Gaming Desktop",
+      status: "verificada",
+      credit: "Imagen local del proyecto: HP OMEN 45L Gaming.jpg",
+    },
     range: "Alta",
     description:
       "PC de escritorio gamer con chasis grande, refrigeración avanzada y configuraciones con GPU dedicada.",
@@ -138,6 +150,12 @@ export const products = [
     type: "Escritorio gama media",
     brand: "Lenovo",
     model: "Legion Tower 5 Gen 8",
+    image: {
+      src: "./images/Lenovo Legion Tower 5 Gen 8.jpg",
+      alt: "Lenovo Legion Tower 5 Gen 8",
+      status: "verificada",
+      credit: "Imagen local del proyecto: Lenovo Legion Tower 5 Gen 8.jpg",
+    },
     range: "Media",
     description:
       "Torre gamer equilibrada para jugar en Full HD o QHD sin llegar al costo de equipos entusiastas.",
@@ -163,6 +181,12 @@ export const products = [
     type: "Escritorio gama media",
     brand: "Dell",
     model: "XPS Desktop 8960",
+    image: {
+      src: "./images/Dell XPS Desktop 8960.webp",
+      alt: "Dell XPS Desktop 8960",
+      status: "verificada",
+      credit: "Imagen local del proyecto: Dell XPS Desktop 8960.webp",
+    },
     range: "Media",
     description:
       "Escritorio sobrio para productividad, creación ligera y configuraciones con GPU dedicada moderada.",
@@ -185,6 +209,12 @@ export const products = [
     type: "Escritorio gama media",
     brand: "HP",
     model: "ENVY Desktop TE01",
+    image: {
+      src: "./images/HP ENVY Desktop TE01.webp",
+      alt: "HP ENVY Desktop TE01",
+      status: "verificada",
+      credit: "Imagen local del proyecto: HP ENVY Desktop TE01.webp",
+    },
     range: "Media",
     description:
       "Torre doméstica/productiva con buenas opciones de almacenamiento y CPU para trabajo diario.",
@@ -207,6 +237,12 @@ export const products = [
     type: "Escritorio gama baja",
     brand: "HP",
     model: "All-in-One 24-cr0233la",
+    image: {
+      src: "./images/HP All-in-One 24-cr0233la.jpg",
+      alt: "HP All-in-One 24-cr0233la",
+      status: "verificada",
+      credit: "Imagen local del proyecto: HP All-in-One 24-cr0233la.jpg",
+    },
     range: "Baja",
     description:
       "Computadora todo-en-uno para tareas básicas con pantalla integrada y poco cableado.",
@@ -232,6 +268,12 @@ export const products = [
     type: "Escritorio gama baja",
     brand: "Lenovo",
     model: "IdeaCentre Mini Gen 8",
+    image: {
+      src: "./images/Lenovo IdeaCentre Mini Gen 8.avif",
+      alt: "Lenovo IdeaCentre Mini Gen 8",
+      status: "verificada",
+      credit: "Imagen local del proyecto: Lenovo IdeaCentre Mini Gen 8.avif",
+    },
     range: "Baja",
     description:
       "Mini PC compacta para escritorios pequeños, trabajo escolar y consumo multimedia.",
@@ -254,6 +296,12 @@ export const products = [
     type: "Escritorio gama baja",
     brand: "Acer",
     model: "Aspire TC",
+    image: {
+      src: "./images/Acer Aspire TC.jpg",
+      alt: "Acer Aspire TC",
+      status: "verificada",
+      credit: "Imagen local del proyecto: Acer Aspire TC.jpg",
+    },
     range: "Baja",
     description:
       "Torre económica para hogar o laboratorio, pensada para tareas generales.",
