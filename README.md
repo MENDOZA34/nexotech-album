@@ -1,6 +1,6 @@
 # NexoTech
 
-NexoTech es un sitio web estático para el trabajo universitario **Álbum Tecnológico Comparativo**. Incluye catálogo, fichas detalladas, búsqueda, filtros combinables, comparador, comparaciones educativas, guía de conceptos, fuentes y modo presentación.
+NexoTech es una web estática con Vite y JavaScript para explorar, entender y comparar tecnología. Incluye catálogo, fichas detalladas, búsqueda, filtros combinables, comparador, análisis, guía de conceptos, fuentes, modo presentación y una lista local de productos guardados.
 
 ## Requisitos
 
@@ -33,15 +33,15 @@ npm.cmd run preview
 ```text
 nexotech-album/
 ├── public/
-│   └── images/              Imágenes verificadas o marcadores visuales.
+│   └── images/              Fotografías enlazadas y marcador visual.
 ├── scripts/
 │   └── check-data.js        Valida cantidades, tipos y campos obligatorios.
 ├── src/
 │   ├── data/
-│   │   ├── concepts.js      Guía de conceptos y comparaciones preparadas.
+│   │   ├── concepts.js      Guía de conceptos y análisis.
 │   │   ├── products.js      Catálogo editable de productos.
-│   │   └── siteMeta.js      Datos generales y campos académicos editables.
-│   ├── main.js              Renderiza vistas, rutas, filtros y comparador.
+│   │   └── siteMeta.js      Nombre, lema y avisos generales.
+│   ├── main.js              Renderiza rutas, navegación, filtros, listas y comparador.
 │   └── styles.css           Diseño responsive de NexoTech.
 ├── index.html
 ├── package.json
@@ -49,13 +49,30 @@ nexotech-album/
 └── README.md
 ```
 
-## Cómo funciona
+## Navegación
 
-Los productos están en `src/data/products.js` como objetos JavaScript. `src/main.js` importa ese arreglo, lo filtra según la búsqueda o los selectores, y convierte cada producto en tarjetas del catálogo. Cuando se abre una ficha, la ruta `#/producto/id-del-producto` busca el producto por `id` y muestra sus características, precio, ventajas, limitaciones, uso recomendado y fuentes.
+La cabecera muestra seis accesos principales:
+
+- Inicio
+- Productos
+- PCs
+- Listas
+- Marcas
+- Más
+
+El menú Más contiene Comparador, Análisis, Guía, Fuentes y Presentación. Funciona con clic, toque, teclado, Escape y cierre al pulsar fuera.
+
+## Cómo funciona el catálogo
+
+Los productos están en `src/data/products.js` como objetos JavaScript. `src/main.js` importa ese arreglo, aplica búsqueda y filtros, agrupa resultados por categoría y genera tarjetas, fichas, fuentes y comparaciones.
+
+El catálogo completo se abre en `#/catalogo`. La vista `#/pcs` reutiliza el catálogo filtrado por computadoras de escritorio e incluye accesos a Escritorio y Laptops. La vista `#/marcas` genera las marcas reales desde el catálogo y enlaza a `#/catalogo?marca=...`.
+
+## Listas
+
+La sección `#/listas` guarda favoritos en `localStorage` usando solo identificadores de producto. Si un identificador ya no existe, se ignora. Desde Listas se pueden comparar dos productos guardados cuando pertenecen al mismo tipo.
 
 ## Agregar o modificar productos
-
-Para agregar un producto:
 
 1. Abre `src/data/products.js`.
 2. Copia una ficha `p({ ... })` de una categoría parecida.
@@ -63,81 +80,31 @@ Para agregar un producto:
 4. Mantén `specs` entre 4 y 6 características.
 5. Ejecuta `npm.cmd run check:data`.
 
-Para eliminar un producto, borra su bloque `p({ ... })` y revisa si la categoría queda incompleta. El proyecto espera 93 productos exactos.
-
-Para corregir una característica, edita el arreglo `specs` dentro de la ficha:
-
-```js
-specs: [
-  ["Procesador", "Dato corregido"],
-  ["Memoria", "Dato corregido"],
-]
-```
+El proyecto espera 93 productos exactos.
 
 ## Precios y fuentes
 
-Para cambiar un precio, edita el bloque `price` de la ficha en `src/data/products.js`.
-
-Precio referencial:
+Para cambiar un precio, edita el bloque `price` de la ficha.
 
 ```js
 price: refPrice("4,999", "GTQ", "Guatemala", "Nombre de tienda", "https://enlace-real")
-```
-
-Precio pendiente:
-
-```js
 price: pendingPrice("Guatemala")
 ```
 
-La fecha de consulta se controla con la constante `checked` al inicio de `src/data/products.js`. Si solo una ficha necesita otra fecha, puedes añadirla directamente dentro del objeto `price`.
-
-Para agregar o corregir una fuente, edita `sources`:
-
-```js
-sources: [
-  source("Fabricante - página oficial", "https://enlace-real"),
-  source("Tienda - precio consultado", "https://enlace-real", "Precio local")
-]
-```
+La fecha de consulta se controla con la constante `checked` al inicio de `src/data/products.js`. Agrega fuentes reales en `sources`; no inventes enlaces, precios ni especificaciones.
 
 ## Imágenes
 
-Guarda imágenes verificadas en `public/images/`. Luego edita el bloque `image` del producto:
+Las imágenes se guardan en `public/images/`. El campo `image.status` distingue:
 
-```js
-image: {
-  src: "./images/nombre-del-archivo.jpg",
-  alt: "Foto del producto Marca Modelo",
-  status: "verificada",
-  credit: "Crédito o fuente de imagen",
-}
-```
+- `verificada`: foto con fuente y permiso documentado.
+- `enlazada pendiente de permiso`: foto local enlazada, pero con permiso/fuente pendiente.
+- `pendiente de verificación`: se muestra el visual por categoría, no una fotografía del producto.
 
-Si no hay una imagen verificable, deja el marcador pendiente. No uses fotografías de otro modelo ni imágenes sin permiso claro.
-
-## Datos académicos
-
-Edita `src/data/siteMeta.js` para cambiar universidad, curso, docente, integrantes, carnés y fecha de entrega. Esos campos aparecen en la página de inicio.
+No uses fotografías de otro modelo ni imágenes generadas como si fueran fotos reales.
 
 ## GitHub Pages
 
 El proyecto usa rutas hash (`#/catalogo`) y `base: "./"` en `vite.config.js`, por lo que la compilación funciona dentro de una ruta de repositorio como `/nexotech-album/`.
-
-Para publicar posteriormente, puedes usar una de estas opciones:
-
-1. Compilar localmente con `npm run build` y publicar `dist/` con la configuración que prefieras.
-2. Crear después un workflow de GitHub Actions que ejecute `npm ci`, `npm run check:data` y `npm run build`, y publique `dist/`.
-
-## Subir cambios a GitHub
-
-Cuando ya revises el proyecto local, los comandos habituales serían:
-
-```bash
-git status
-git add .
-git commit -m "Completar álbum tecnológico comparativo"
-git push
-```
 
 No ejecutes `git push` hasta revisar los cambios.

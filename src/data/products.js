@@ -54,8 +54,8 @@ export const products = [
     image: {
       src: "./images/Mac Studio now with M5 Max and M5 Ultra.jpg",
       alt: "Apple Mac Studio con M5 Max y M5 Ultra",
-      status: "verificada",
-      credit: "Imagen proporcionada en el proyecto: Mac Studio now with M5 Max and M5 Ultra.jpg",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: Mac Studio now with M5 Max and M5 Ultra.jpg",
     },
     price: refPrice(
       "pendiente",
@@ -89,8 +89,8 @@ export const products = [
     image: {
       src: "./images/Alienware-Area-51.jpg",
       alt: "Dell Alienware Area-51 Gaming Desktop",
-      status: "verificada",
-      credit: "Imagen local del proyecto: Alienware-Area-51.jpg",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: Alienware-Area-51.jpg",
     },
     range: "Alta",
     description:
@@ -125,8 +125,8 @@ export const products = [
     image: {
       src: "./images/HP OMEN 45L Gaming.jpg",
       alt: "HP OMEN 45L Gaming Desktop",
-      status: "verificada",
-      credit: "Imagen local del proyecto: HP OMEN 45L Gaming.jpg",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: HP OMEN 45L Gaming.jpg",
     },
     range: "Alta",
     description:
@@ -153,8 +153,8 @@ export const products = [
     image: {
       src: "./images/Lenovo Legion Tower 5 Gen 8.jpg",
       alt: "Lenovo Legion Tower 5 Gen 8",
-      status: "verificada",
-      credit: "Imagen local del proyecto: Lenovo Legion Tower 5 Gen 8.jpg",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: Lenovo Legion Tower 5 Gen 8.jpg",
     },
     range: "Media",
     description:
@@ -184,8 +184,8 @@ export const products = [
     image: {
       src: "./images/Dell XPS Desktop 8960.webp",
       alt: "Dell XPS Desktop 8960",
-      status: "verificada",
-      credit: "Imagen local del proyecto: Dell XPS Desktop 8960.webp",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: Dell XPS Desktop 8960.webp",
     },
     range: "Media",
     description:
@@ -210,10 +210,10 @@ export const products = [
     brand: "HP",
     model: "ENVY Desktop TE01",
     image: {
-      src: "./images/HP ENVY Desktop TE01.webp",
-      alt: "HP ENVY Desktop TE01",
-      status: "verificada",
-      credit: "Imagen local del proyecto: HP ENVY Desktop TE01.webp",
+      src: placeholder,
+      alt: "Marcador visual para HP ENVY Desktop TE01",
+      status: "pendiente de verificación",
+      credit: "Fotografía local no usada: contiene marca de agua de PCMag y no se confirmó permiso de reutilización.",
     },
     range: "Media",
     description:
@@ -238,10 +238,10 @@ export const products = [
     brand: "HP",
     model: "All-in-One 24-cr0233la",
     image: {
-      src: "./images/HP All-in-One 24-cr0233la.jpg",
-      alt: "HP All-in-One 24-cr0233la",
-      status: "verificada",
-      credit: "Imagen local del proyecto: HP All-in-One 24-cr0233la.jpg",
+      src: placeholder,
+      alt: "Marcador visual para HP All-in-One 24-cr0233la",
+      status: "pendiente de verificación",
+      credit: "Fotografía local no usada: el archivo disponible muestra una torre HP, no una All-in-One identificable.",
     },
     range: "Baja",
     description:
@@ -269,10 +269,10 @@ export const products = [
     brand: "Lenovo",
     model: "IdeaCentre Mini Gen 8",
     image: {
-      src: "./images/Lenovo IdeaCentre Mini Gen 8.avif",
-      alt: "Lenovo IdeaCentre Mini Gen 8",
-      status: "verificada",
-      credit: "Imagen local del proyecto: Lenovo IdeaCentre Mini Gen 8.avif",
+      src: placeholder,
+      alt: "Marcador visual para Lenovo IdeaCentre Mini Gen 8",
+      status: "pendiente de verificación",
+      credit: "Fotografía AVIF local no usada: no se pudo confirmar visualmente el modelo ni el permiso en este entorno.",
     },
     range: "Baja",
     description:
@@ -299,8 +299,8 @@ export const products = [
     image: {
       src: "./images/Acer Aspire TC.jpg",
       alt: "Acer Aspire TC",
-      status: "verificada",
-      credit: "Imagen local del proyecto: Acer Aspire TC.jpg",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: Acer Aspire TC.jpg",
     },
     range: "Baja",
     description:

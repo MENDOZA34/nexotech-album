@@ -1,6 +1,6 @@
 export const siteMeta = {
   title: "NexoTech",
-  subtitle: "Álbum Tecnológico Comparativo para explorar, entender y comparar tecnología real.",
+  subtitle: "Explora, entiende y compara tecnología",
   academicFields: {
     universidad: "EDITAR: Nombre de la universidad",
     curso: "EDITAR: Nombre del curso",
@@ -13,5 +13,5 @@ export const siteMeta = {
   priceNotice:
     "Los precios son referencias de consulta y pueden cambiar. Cuando no hubo una fuente fiable, la ficha lo indica de forma visible o especifica el mercado consultado.",
   imageNotice:
-    "Las fichas usan visuales por categoría cuando no se confirmó una fotografía con permiso de reutilización. Esos visuales no son fotos del producto.",
+    "Las fichas distinguen entre fotografía enlazada, fotografía con permiso pendiente y visuales por categoría. Los visuales no son fotos del producto.",
 };
