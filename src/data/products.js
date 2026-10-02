@@ -34,6 +34,13 @@ const image = (label) => ({
     "Marcador propio del proyecto. Fotografía comercial pendiente de permiso o licencia verificable.",
 });
 
+const localImage = (label, fileName) => ({
+  src: `./images/${fileName}`,
+  alt: label,
+  status: "enlazada pendiente de permiso",
+  credit: `Imagen local del proyecto pendiente de fuente y permiso documentado: ${fileName}`,
+});
+
 const p = (item) => ({
   ...item,
   image: item.image || image(`${item.brand} ${item.model}`),
@@ -52,10 +59,10 @@ export const products = [
     description:
       "Estación de trabajo compacta para edición, desarrollo, IA local y producción audiovisual profesional.",
     image: {
-      src: "./images/Mac Studio now with M5 Max and M5 Ultra.jpg",
-      alt: "Apple Mac Studio con M5 Max y M5 Ultra",
+      src: "./images/Apple Mac Studio con M5 Ultra.webp",
+      alt: "Apple Mac Studio con M5 Ultra",
       status: "enlazada pendiente de permiso",
-      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: Mac Studio now with M5 Max and M5 Ultra.jpg",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: Apple Mac Studio con M5 Ultra.webp",
     },
     price: refPrice(
       "pendiente",
@@ -210,10 +217,10 @@ export const products = [
     brand: "HP",
     model: "ENVY Desktop TE01",
     image: {
-      src: placeholder,
-      alt: "Marcador visual para HP ENVY Desktop TE01",
-      status: "pendiente de verificación",
-      credit: "Fotografía local no usada: contiene marca de agua de PCMag y no se confirmó permiso de reutilización.",
+      src: "./images/HP ENVY Desktop TE01.webp",
+      alt: "HP ENVY Desktop TE01",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: HP ENVY Desktop TE01.webp",
     },
     range: "Media",
     description:
@@ -238,10 +245,10 @@ export const products = [
     brand: "HP",
     model: "All-in-One 24-cr0233la",
     image: {
-      src: placeholder,
-      alt: "Marcador visual para HP All-in-One 24-cr0233la",
-      status: "pendiente de verificación",
-      credit: "Fotografía local no usada: el archivo disponible muestra una torre HP, no una All-in-One identificable.",
+      src: "./images/HP All-in-One 24-cr0233la...avif",
+      alt: "HP All-in-One 24-cr0233la",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: HP All-in-One 24-cr0233la...avif",
     },
     range: "Baja",
     description:
@@ -269,10 +276,10 @@ export const products = [
     brand: "Lenovo",
     model: "IdeaCentre Mini Gen 8",
     image: {
-      src: placeholder,
-      alt: "Marcador visual para Lenovo IdeaCentre Mini Gen 8",
-      status: "pendiente de verificación",
-      credit: "Fotografía AVIF local no usada: no se pudo confirmar visualmente el modelo ni el permiso en este entorno.",
+      src: "./images/Lenovo IdeaCentre Mini Gen 8.avif",
+      alt: "Lenovo IdeaCentre Mini Gen 8",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: Lenovo IdeaCentre Mini Gen 8.avif",
     },
     range: "Baja",
     description:
@@ -327,6 +334,12 @@ export const products = [
     model: "MacBook Pro 16 pulgadas M4 Max",
     range: "Alta",
     description: "Portátil profesional para edición, desarrollo, música y trabajo creativo exigente.",
+    image: {
+      src: "./images/Apple MacBook Pro 16 pulgadas M4 Max.jpg",
+      alt: "Apple MacBook Pro 16 pulgadas M4 Max",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: Apple MacBook Pro 16 pulgadas M4 Max.jpg",
+    },
     price: refPrice("desde 3,499", "USD", "Estados Unidos", "Apple Store", "https://www.apple.com/macbook-pro/"),
     specs: [
       ["Procesador", "Apple M4 Max"],
@@ -348,6 +361,12 @@ export const products = [
     model: "XPS 16 9640",
     range: "Alta",
     description: "Laptop premium con pantalla de alta resolución y opciones NVIDIA RTX para creación.",
+    image: {
+      src: "./images/Dell XPS 16 9640.webp",
+      alt: "Dell XPS 16 9640",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: Dell XPS 16 9640.webp",
+    },
     price: pendingPrice("Estados Unidos"),
     specs: [
       ["CPU", "Intel Core Ultra"],
@@ -369,6 +388,12 @@ export const products = [
     model: "ThinkPad X1 Carbon Gen 13 Aura Edition",
     range: "Alta",
     description: "Ultrabook empresarial ligero con plataforma Intel Core Ultra y enfoque en movilidad.",
+    image: {
+      src: "./images/Lenovo ThinkPad X1 Carbon Gen 13 Aura Edition.avif",
+      alt: "Lenovo ThinkPad X1 Carbon Gen 13 Aura Edition",
+      status: "enlazada pendiente de permiso",
+      credit: "Imagen local del proyecto pendiente de fuente y permiso documentado: Lenovo ThinkPad X1 Carbon Gen 13 Aura Edition.avif",
+    },
     price: pendingPrice("Estados Unidos"),
     specs: [
       ["CPU", "Intel Core Ultra serie 200V"],
@@ -393,6 +418,7 @@ export const products = [
     model: "ThinkPad E14 Gen 6",
     range: "Media",
     description: "Portátil empresarial equilibrada con buen teclado y especificaciones suficientes para estudio.",
+    image: localImage("Lenovo ThinkPad E14 Gen 6", "Lenovo ThinkPad E14 Gen 6.webp"),
     price: refPrice("8,230", "GTQ", "Guatemala", "Kemik Guatemala", "https://www.kemik.gt/products-section/1488"),
     specs: [
       ["CPU", "Intel Core Ultra 5 en oferta local revisada"],
@@ -414,6 +440,7 @@ export const products = [
     model: "Victus Gaming 15-fb3009la",
     range: "Media",
     description: "Laptop gamer accesible con GPU dedicada para juegos y trabajos gráficos moderados.",
+    image: localImage("HP Victus Gaming 15-fb3009la", "HP Victus Gaming 15-fb3009la.webp"),
     price: pendingPrice("Guatemala"),
     specs: [
       ["CPU", "AMD Ryzen 5 8645HS según listado local"],
@@ -435,6 +462,7 @@ export const products = [
     model: "Nitro V 15",
     range: "Media",
     description: "Laptop gamer de entrada-media con pantalla rápida y GPU RTX en versiones recientes.",
+    image: localImage("Acer Nitro V 15", "Acer Nitro V 15.jpg"),
     price: refPrice("8,508", "GTQ", "Guatemala", "Kemik Guatemala", "https://www.kemik.gt/products-section/1488"),
     specs: [
       ["CPU", "Intel Core i5-13420H en oferta local revisada"],
@@ -456,6 +484,7 @@ export const products = [
     model: "IdeaPad 1 15IAU7",
     range: "Baja",
     description: "Laptop económica para tareas escolares, navegación y documentos.",
+    image: localImage("Lenovo IdeaPad 1 15IAU7", "Lenovo IdeaPad 1 15IAU7.jpg"),
     price: refPrice("3,335", "GTQ", "Guatemala", "Kemik Guatemala", "https://www.kemik.gt/products-section/1488"),
     specs: [
       ["CPU", "Intel Core i3-1215U en oferta local revisada"],
@@ -477,6 +506,7 @@ export const products = [
     model: "15-fc0043la",
     range: "Baja",
     description: "Equipo económico con procesador Ryzen 3 para productividad básica.",
+    image: localImage("HP 15-fc0043la", "HP 15-fc0043la.jpg"),
     price: refPrice("3,499", "GTQ", "Guatemala", "Kemik Guatemala", "https://www.kemik.gt/products-section/1488"),
     specs: [
       ["CPU", "AMD Ryzen 3 7320U en oferta local revisada"],
@@ -498,6 +528,7 @@ export const products = [
     model: "Inspiron 3535 Ryzen 3",
     range: "Baja",
     description: "Laptop de entrada con SSD para clases y trabajo diario.",
+    image: localImage("Dell Inspiron 3535 Ryzen 3", "Dell Inspiron 3535 Ryzen 3.jpg"),
     price: refPrice("3,656", "GTQ", "Guatemala", "Kemik Guatemala", "https://www.kemik.gt/products-section/1488"),
     specs: [
       ["CPU", "AMD Ryzen 3 7320U en oferta local revisada"],
@@ -520,6 +551,7 @@ export const products = [
     model: "iPhone 16 Pro Max",
     range: "Alta",
     description: "Teléfono premium con chip A18 Pro, cámara avanzada y ecosistema iOS.",
+    image: localImage("Apple iPhone 16 Pro Max", "Apple iPhone 16 Pro Max.webp"),
     price: refPrice("desde 1,199", "USD", "Estados Unidos", "Apple Store", "https://www.apple.com/iphone-16-pro/"),
     specs: [
       ["Chip", "A18 Pro"],
@@ -541,6 +573,7 @@ export const products = [
     model: "Galaxy S25 Ultra",
     range: "Alta",
     description: "Android insignia con pantalla grande, cámaras versátiles y S Pen integrado.",
+    image: localImage("Samsung Galaxy S25 Ultra", "Samsung Galaxy S25 Ultra.jpg"),
     price: pendingPrice("Guatemala o Estados Unidos"),
     specs: [
       ["Procesador", "Snapdragon serie 8 Elite para Galaxy según región"],
@@ -562,6 +595,7 @@ export const products = [
     model: "Pixel 9 Pro XL",
     range: "Alta",
     description: "Teléfono Android enfocado en cámara computacional, IA y actualizaciones directas de Google.",
+    image: localImage("Google Pixel 9 Pro XL", "Google Pixel 9 Pro XL.jpg"),
     price: pendingPrice("Estados Unidos"),
     specs: [
       ["Chip", "Google Tensor G4"],
@@ -583,6 +617,7 @@ export const products = [
     model: "Galaxy A56 5G",
     range: "Media",
     description: "Celular de gama media con pantalla AMOLED, 5G y enfoque equilibrado.",
+    image: localImage("Samsung Galaxy A56 5G", "Samsung Galaxy A56 5G.jpg"),
     price: pendingPrice("Guatemala"),
     specs: [
       ["Pantalla", "Super AMOLED de alta tasa de refresco"],
@@ -604,6 +639,7 @@ export const products = [
     model: "Pixel 9a",
     range: "Media",
     description: "Pixel más accesible con cámara computacional fuerte y Android con actualizaciones directas.",
+    image: localImage("Google Pixel 9a", "Google Pixel 9a.jpg"),
     price: pendingPrice("Estados Unidos"),
     specs: [
       ["Chip", "Google Tensor G4"],
@@ -625,6 +661,7 @@ export const products = [
     model: "Redmi Note 14 Pro 5G",
     range: "Media",
     description: "Gama media orientada a pantalla, batería y carga rápida a precio competitivo.",
+    image: localImage("Xiaomi Redmi Note 14 Pro 5G", "Xiaomi Redmi Note 14 Pro 5G.webp"),
     price: pendingPrice("Guatemala"),
     specs: [
       ["Pantalla", "AMOLED de alta tasa de refresco"],
@@ -646,6 +683,7 @@ export const products = [
     model: "Galaxy A16 5G",
     range: "Baja",
     description: "Teléfono económico con conectividad 5G para uso diario básico.",
+    image: localImage("Samsung Galaxy A16 5G", "Samsung Galaxy A16 5G.png"),
     price: pendingPrice("Guatemala"),
     specs: [
       ["Red", "5G"],
@@ -667,6 +705,7 @@ export const products = [
     model: "Moto G 2025",
     range: "Baja",
     description: "Celular económico para usuarios que buscan Android sencillo y batería para el día.",
+    image: localImage("Motorola Moto G 2025", "Motorola Moto G 2025.jpg"),
     price: pendingPrice("Estados Unidos"),
     specs: [
       ["Sistema", "Android"],
@@ -688,6 +727,7 @@ export const products = [
     model: "Redmi 14C",
     range: "Baja",
     description: "Smartphone de entrada con pantalla grande y precio bajo.",
+    image: localImage("Xiaomi Redmi 14C", "Xiaomi Redmi 14C.png"),
     price: pendingPrice("Guatemala"),
     specs: [
       ["Pantalla", "Grande para multimedia básica"],
@@ -710,6 +750,7 @@ export const products = [
     model: "iPad Pro 11 pulgadas M4",
     range: "Alta",
     description: "Tablet potente y ligera con pantalla Ultra Retina XDR y compatibilidad con Apple Pencil Pro.",
+    image: localImage("Apple iPad Pro 11 pulgadas M4", "Apple iPad Pro 11 pulgadas M4.png"),
     price: refPrice("desde 999", "USD", "Estados Unidos", "Apple Store", "https://www.apple.com/ipad-pro/"),
     specs: [
       ["Chip", "Apple M4"],
@@ -731,6 +772,7 @@ export const products = [
     model: "Galaxy Tab S10 Ultra",
     range: "Alta",
     description: "Tablet Android grande con pantalla AMOLED y S Pen incluido.",
+    image: localImage("Samsung Galaxy Tab S10 Ultra", "Samsung Galaxy Tab S10 Ultra.png"),
     price: pendingPrice("Guatemala o Estados Unidos"),
     specs: [
       ["Pantalla", "AMOLED de gran formato"],
@@ -752,6 +794,7 @@ export const products = [
     model: "Surface Pro 11th Edition",
     range: "Alta",
     description: "Equipo 2 en 1 con Windows para quien necesita aplicaciones de escritorio en formato tablet.",
+    image: localImage("Microsoft Surface Pro 11th Edition", "Microsoft Surface Pro 11th Edition.jpg"),
     price: pendingPrice("Estados Unidos"),
     specs: [
       ["CPU", "Snapdragon X Plus o X Elite"],
@@ -774,6 +817,7 @@ export const products = [
     model: "870 EVO 1 TB",
     range: "",
     description: "SSD de 2.5 pulgadas con interfaz SATA para renovar laptops o PCs antiguas.",
+    image: localImage("Samsung 870 EVO 1 TB", "Samsung 870 EVO 1 TB.jpg"),
     price: pendingPrice("Guatemala"),
     specs: [
       ["Tipo físico", "SSD 2.5 pulgadas"],
@@ -795,6 +839,7 @@ export const products = [
     model: "MX500 1 TB",
     range: "",
     description: "SSD SATA popular para mejorar arranque y carga de programas en computadoras existentes.",
+    image: localImage("Crucial MX500 1 TB", "Crucial MX500 1 TB.jpg"),
     specs: [
       ["Tipo físico", "SSD 2.5 pulgadas"],
       ["Interfaz", "SATA III"],
@@ -815,6 +860,7 @@ export const products = [
     model: "A400 480 GB",
     range: "",
     description: "SSD SATA económico para acelerar sistemas básicos.",
+    image: localImage("Kingston A400 480 GB", "Kingston A400 480 GB.jpg"),
     specs: [
       ["Tipo físico", "SSD 2.5 pulgadas"],
       ["Interfaz", "SATA III"],
@@ -835,6 +881,7 @@ export const products = [
     model: "990 PRO 2 TB",
     range: "",
     description: "SSD NVMe PCIe 4.0 de alto rendimiento para equipos modernos y consolas compatibles.",
+    image: localImage("Samsung 990 PRO 2 TB", "Samsung 990 PRO 2 TB.jpg"),
     price: refPrice("309", "USD", "MSRP Estados Unidos", "Samsung Newsroom", "https://news.samsung.com/global/samsung-electronics-unveils-high-performance-990-pro-ssd-optimized-for-gaming-and-creative-applications"),
     specs: [
       ["Formato", "M.2 2280"],
@@ -856,6 +903,7 @@ export const products = [
     model: "WD_BLACK SN850X 2 TB",
     range: "",
     description: "SSD NVMe orientado a gaming y cargas rápidas.",
+    image: localImage("Western Digital WD_BLACK SN850X 2 TB", "Western Digital WD_BLACK SN850X 2 TB.jpg"),
     specs: [
       ["Formato", "M.2 2280"],
       ["Interfaz", "PCIe Gen4 x4"],
@@ -876,6 +924,7 @@ export const products = [
     model: "T500 1 TB",
     range: "",
     description: "SSD PCIe 4.0 rápido con versiones con o sin disipador.",
+    image: localImage("Crucial T500 1 TB", "Crucial T500 1 TB.jpg"),
     specs: [
       ["Formato", "M.2 2280"],
       ["Interfaz", "PCIe Gen4 NVMe"],
@@ -896,6 +945,7 @@ export const products = [
     model: "WD Blue 2 TB",
     range: "",
     description: "Disco duro mecánico para almacenamiento masivo económico.",
+    image: localImage("Western Digital WD Blue 2 TB", "Western Digital WD Blue 2 TB.jpg"),
     specs: [
       ["Tipo", "HDD mecánico"],
       ["Formato", "3.5 pulgadas"],
@@ -916,6 +966,7 @@ export const products = [
     model: "BarraCuda 2 TB",
     range: "",
     description: "HDD de escritorio para almacenamiento económico de gran capacidad.",
+    image: localImage("Seagate BarraCuda 2 TB", "Seagate BarraCuda 2 TB.jpg"),
     specs: [
       ["Tipo", "HDD mecánico"],
       ["Formato", "3.5 pulgadas"],
@@ -936,6 +987,7 @@ export const products = [
     model: "X300 4 TB",
     range: "",
     description: "HDD de alto rendimiento para escritorio, juegos y archivos grandes.",
+    image: localImage("Toshiba X300 4 TB", "Toshiba X300 4 TB.jpg"),
     specs: [
       ["Tipo", "HDD mecánico"],
       ["Formato", "3.5 pulgadas"],
@@ -956,6 +1008,7 @@ export const products = [
     model: "T7 Shield 1 TB",
     range: "",
     description: "SSD externo resistente para transportar proyectos y copias rápidas.",
+    image: localImage("Samsung T7 Shield 1 TB", "Samsung T7 Shield 1 TB.png"),
     specs: [
       ["Tipo", "SSD externo"],
       ["Interfaz", "USB 3.2 Gen 2"],
@@ -976,6 +1029,7 @@ export const products = [
     model: "Extreme Portable SSD V2 1 TB",
     range: "",
     description: "SSD externo compacto para creadores y estudiantes que mueven archivos pesados.",
+    image: localImage("SanDisk Extreme Portable SSD V2 1 TB", "SanDisk Extreme Portable SSD V2 1 TB.jpg"),
     specs: [
       ["Tipo", "SSD externo"],
       ["Interfaz", "USB-C"],
@@ -996,6 +1050,7 @@ export const products = [
     model: "Expansion Desktop 6 TB",
     range: "",
     description: "Disco externo de escritorio con mucha capacidad para copias y archivos multimedia.",
+    image: localImage("Seagate Expansion Desktop 6 TB", "Seagate Expansion Desktop 6 TB.jpeg"),
     price: refPrice("2,538", "GTQ", "Guatemala", "Kemik Guatemala", "https://www.kemik.gt/products-section/989?category=computadoras-accesorios&page=22"),
     specs: [
       ["Tipo", "HDD externo"],
@@ -1762,6 +1817,7 @@ export const products = [
     brand: "Arduino",
     model: "Mega 2560 Rev3",
     description: "Placa Arduino con muchos pines para proyectos con varias entradas y salidas.",
+    image: localImage("Arduino Mega 2560 Rev3", "Arduino Mega 2560 Rev3.jpg"),
     specs: [["Microcontrolador", "ATmega2560"], ["Pines digitales", "54"], ["Entradas analógicas", "16"], ["Voltaje", "5 V"], ["Uso", "Proyectos con muchos módulos"]],
     advantages: ["Muchos pines", "Muy documentada", "Buena para robótica educativa"],
     limitations: ["Sin Wi-Fi integrado", "Procesador de 8 bits"],
