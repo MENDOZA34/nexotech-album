@@ -832,6 +832,13 @@ dd {
   overflow-x: auto;
 }
 
+.compare-summary {
+  max-width: 980px;
+  margin: 0 0 16px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .compare-table,
 .source-table {
   width: 100%;
@@ -861,6 +868,25 @@ dd {
 .source-table span {
   color: var(--muted);
   font-size: 0.86rem;
+}
+
+.source-thumbnail {
+  width: 88px;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.source-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .comparison-list {

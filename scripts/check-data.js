@@ -56,8 +56,8 @@ for (const product of products) {
   for (const field of ["category", "type", "brand", "model", "description", "recommendedUse"]) {
     if (!product[field]) errors.push(`${product.id}: falta ${field}`);
   }
-  if (!Array.isArray(product.specs) || product.specs.length < 4 || product.specs.length > 6) {
-    errors.push(`${product.id}: debe tener entre 4 y 6 características`);
+  if (!Array.isArray(product.specs) || product.specs.length < 4 || product.specs.length > 14) {
+    errors.push(`${product.id}: debe tener entre 4 y 14 características`);
   }
   if (!Array.isArray(product.advantages) || !product.advantages.length) errors.push(`${product.id}: faltan ventajas`);
   if (!Array.isArray(product.limitations) || !product.limitations.length) errors.push(`${product.id}: faltan limitaciones`);

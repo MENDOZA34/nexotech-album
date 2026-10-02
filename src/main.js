@@ -100,6 +100,10 @@ function money(price) {
   if (!price || price.status === "pendiente") return "Precio por confirmar";
   if (String(price.amount).toLowerCase() === "pendiente") return "Precio por confirmar";
   if (String(price.amount).toLowerCase() === "varía") return "Precio variable";
+  if (price.currency === "GTQ") {
+    const numeric = Number(String(price.amount).replaceAll(",", ""));
+    if (Number.isFinite(numeric)) return `Q ${numeric.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
   const currencyLabels = { GTQ: "Q", USD: "US$" };
   return `${currencyLabels[price.currency] || price.currency} ${price.amount}`;
 }
@@ -250,7 +254,6 @@ function productCard(product) {
         ${productMedia(product)}
         <span class="status-stack">
           ${imageState.pending ? `<span class="status-chip">Sin foto verificada</span>` : ""}
-          ${imageState.linkedPending ? `<span class="status-chip pending-photo">Foto pendiente de permiso</span>` : ""}
           ${product.price.status === "pendiente" ? `<span class="status-chip muted-chip">Precio por confirmar</span>` : ""}
         </span>
       </a>
@@ -299,9 +302,8 @@ function renderHome() {
         <p>Consulta productos reales por categoría, marca, tipo y gama. Cada ficha conserva sus fuentes, precios de referencia y datos pendientes cuando corresponde.</p>
       </div>
       <div class="callout">
-        <strong>Datos con contexto</strong>
-        <p>${siteMeta.priceNotice}</p>
-        <p>${siteMeta.imageNotice}</p>
+        <strong>Información para tu compra</strong>
+        <p>Compara las características y los precios de referencia de cada producto. Para consultar el precio vigente, la disponibilidad y las opciones de configuración, visita la página de la tienda o del fabricante enlazada en su ficha.</p>
       </div>
     </section>
     <section class="section">
@@ -461,6 +463,49 @@ function compareSelect(id, label, value, options) {
   return `<label class="field" for="${id}"><span>${label}</span><select id="${id}" data-compare="${id}">${options.map((product) => `<option value="${product.id}" ${product.id === value ? "selected" : ""}>${escapeHtml(product.brand)} ${escapeHtml(product.model)}</option>`).join("")}</select></label>`;
 }
 
+function specValue(product, label) {
+  return product?.specs.find(([key]) => key === label)?.[1] || "";
+}
+
+function compareHighlights(a, b, labels) {
+  if (!a || !b) return "";
+  const priority = [
+    "Procesador y núcleos",
+    "CPU y núcleos",
+    "Chip",
+    "RAM",
+    "Memoria",
+    "Memoria gráfica",
+    "GPU",
+    "Almacenamiento",
+    "Pantalla",
+    "Resolución",
+    "Frecuencia",
+    "Batería",
+    "Peso",
+    "Conectividad",
+    "Puertos",
+    "Compatibilidad",
+    "Dimensiones",
+  ];
+  const orderedLabels = unique([...priority.filter((label) => labels.includes(label)), ...labels]);
+  const differences = orderedLabels
+    .map((label) => ({ label, aValue: specValue(a, label), bValue: specValue(b, label) }))
+    .filter(({ aValue, bValue }) => aValue && bValue && aValue !== bValue)
+    .slice(0, 4);
+  if (!differences.length) {
+    return `<p class="compare-summary">Estos dos productos comparten las características principales documentadas; revisa precio, uso recomendado y disponibilidad antes de decidir.</p>`;
+  }
+  const details = differences
+    .map(({ label, aValue, bValue }) => `${label}: ${a.brand} ${a.model} indica ${aValue}; ${b.brand} ${b.model} indica ${bValue}.`)
+    .join(" ");
+  const context =
+    a.category === b.category
+      ? "Resumen de diferencias relevantes:"
+      : "Resumen entre categorías distintas; se comparan solo aspectos compatibles:";
+  return `<p class="compare-summary">${escapeHtml(context)} ${escapeHtml(details)}</p>`;
+}
+
 function applyCompareQuery() {
   const params = paramsForRoute();
   if (params.get("tipo")) state.compareType = params.get("tipo");
@@ -477,6 +522,7 @@ function renderComparator() {
   const a = byId(state.compareA);
   const b = byId(state.compareB);
   const labels = unique([...(a?.specs || []), ...(b?.specs || [])].map(([label]) => label));
+  const summary = compareHighlights(a, b, labels);
   const rows = labels
     .map((label) => {
       const av = a?.specs.find(([key]) => key === label)?.[1] || "No indicado";
@@ -487,7 +533,7 @@ function renderComparator() {
   return layout(`
     <section class="page-head"><h1>¿Cuál se adapta mejor a ti?</h1><p>Compara dos modelos del mismo tipo para ver diferencias en precio, características y uso recomendado sin mezclar productos incompatibles.</p></section>
     <section class="toolbar comparator-toolbar"><label class="field" for="compare-type"><span>Tipo de producto</span><select id="compare-type" data-compare="type">${types.map((type) => `<option value="${escapeHtml(type)}" ${type === state.compareType ? "selected" : ""}>${escapeHtml(type)}</option>`).join("")}</select></label>${compareSelect("compare-a", "Producto A", state.compareA, options)}${compareSelect("compare-b", "Producto B", state.compareB, options)}</section>
-    ${a && b ? `<section class="compare-grid"><article class="compare-card">${productCard(a)}</article><article class="compare-card">${productCard(b)}</article></section><section class="panel compare-table-panel"><h2>Diferencias destacadas</h2><table class="compare-table"><thead><tr><th>Campo</th><th>${escapeHtml(a.brand)} ${escapeHtml(a.model)}</th><th>${escapeHtml(b.brand)} ${escapeHtml(b.model)}</th></tr></thead><tbody><tr class="${money(a.price) !== money(b.price) ? "difference" : ""}"><th>Precio</th><td>${escapeHtml(money(a.price))}</td><td>${escapeHtml(money(b.price))}</td></tr>${rows}<tr class="difference"><th>Uso recomendado</th><td>${escapeHtml(a.recommendedUse)}</td><td>${escapeHtml(b.recommendedUse)}</td></tr></tbody></table></section>` : `<section class="empty-state"><h2>Este tipo necesita al menos dos productos</h2><p>Elige otro tipo para comparar dos modelos.</p></section>`}
+    ${a && b ? `<section class="compare-grid"><article class="compare-card">${productCard(a)}</article><article class="compare-card">${productCard(b)}</article></section><section class="panel compare-table-panel"><h2>Diferencias destacadas</h2>${summary}<table class="compare-table"><thead><tr><th>Campo</th><th>${escapeHtml(a.brand)} ${escapeHtml(a.model)}</th><th>${escapeHtml(b.brand)} ${escapeHtml(b.model)}</th></tr></thead><tbody><tr class="${money(a.price) !== money(b.price) ? "difference" : ""}"><th>Precio</th><td>${escapeHtml(money(a.price))}</td><td>${escapeHtml(money(b.price))}</td></tr>${rows}<tr class="difference"><th>Uso recomendado</th><td>${escapeHtml(a.recommendedUse)}</td><td>${escapeHtml(b.recommendedUse)}</td></tr></tbody></table></section>` : `<section class="empty-state"><h2>Este tipo necesita al menos dos productos</h2><p>Elige otro tipo para comparar dos modelos.</p></section>`}
   `);
 }
 
@@ -504,14 +550,15 @@ function renderSources() {
     .map((product) => {
       const specLinks = product.sources.map((item) => `<a href="${item.url}" target="_blank" rel="noreferrer">${escapeHtml(item.title)}</a>`).join("<br>");
       const priceSource = product.price.sourceUrl ? `<a href="${product.price.sourceUrl}" target="_blank" rel="noreferrer">${escapeHtml(product.price.sourceName)}</a>` : escapeHtml(product.price.sourceName);
-      return `<tr><td><a href="#/producto/${product.id}">${escapeHtml(product.brand)} ${escapeHtml(product.model)}</a></td><td>${escapeHtml(product.brand)}</td><td>${specLinks}</td><td>${priceSource}<br><span>${escapeHtml(money(product.price))} · ${escapeHtml(product.price.market)} · ${escapeHtml(product.price.date)}</span></td><td>${escapeHtml(imageCredit(product))}</td></tr>`;
+      const priceNote = product.price.note ? `<br><span>${escapeHtml(product.price.note)}</span>` : "";
+      const thumbnail = `<div class="source-thumbnail"><img src="${escapeHtml(product.image.src)}" alt="${escapeHtml(product.image.alt || `${product.brand} ${product.model}`)}" loading="lazy" /></div>`;
+      return `<tr><td><a href="#/producto/${product.id}">${escapeHtml(product.brand)} ${escapeHtml(product.model)}</a></td><td>${escapeHtml(product.brand)}</td><td>${specLinks}</td><td>${priceSource}<br><span>${escapeHtml(money(product.price))} · ${escapeHtml(product.price.market)} · ${escapeHtml(product.price.date)}</span>${priceNote}</td><td>${thumbnail}</td></tr>`;
     })
     .join("");
   const sourceCount = products.reduce((count, product) => count + product.sources.length, 0);
-  const pendingImages = products.filter((product) => !getImageState(product).verified).length;
-  const linkedImages = products.filter((product) => getImageState(product).showsPhoto).length;
+  const thumbnailCount = products.filter((product) => product.image?.src).length;
   const pendingPrices = products.filter((product) => product.price.status === "pendiente").length;
-  return layout(`<section class="page-head"><h1>Consulta el origen de los datos</h1><p>Cada ficha conserva sus fuentes y muestra con claridad cuándo un precio o una imagen todavía no está confirmado.</p></section><section class="notice-grid"><div><strong>${sourceCount}</strong><span>fuentes enlazadas</span></div><div><strong>${linkedImages}</strong><span>fotos enlazadas con permiso pendiente</span></div><div><strong>${pendingImages}</strong><span>imágenes sin verificación completa</span></div><div><strong>${pendingPrices}</strong><span>precios por confirmar</span></div></section><section class="panel"><h2>Créditos visuales</h2><p>${siteMeta.imageNotice}</p><p>Los productos sin fotografía confirmada usan visuales por categoría. Las fotos enlazadas mantienen visible su pendiente de permiso o fuente cuando aplica.</p></section><section class="source-table-wrap"><table class="source-table"><thead><tr><th>Producto</th><th>Fabricante</th><th>Especificaciones</th><th>Precio</th><th>Imagen/crédito</th></tr></thead><tbody>${sourceRows}</tbody></table></section>`);
+  return layout(`<section class="page-head"><h1>Consulta el origen de los datos</h1><p>Cada ficha conserva sus fuentes, enlaces de referencia y precio consultado.</p></section><section class="notice-grid"><div><strong>${sourceCount}</strong><span>fuentes enlazadas</span></div><div><strong>${products.length}</strong><span>productos documentados</span></div><div><strong>${thumbnailCount}</strong><span>miniaturas del catálogo</span></div><div><strong>${pendingPrices}</strong><span>precios por confirmar</span></div></section><section class="source-table-wrap"><table class="source-table"><thead><tr><th>Producto</th><th>Fabricante</th><th>Especificaciones</th><th>Precio</th><th>Imagen</th></tr></thead><tbody>${sourceRows}</tbody></table></section>`);
 }
 
 function slides() {
