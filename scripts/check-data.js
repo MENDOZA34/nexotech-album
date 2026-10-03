@@ -62,6 +62,16 @@ for (const product of products) {
   if (!Array.isArray(product.advantages) || !product.advantages.length) errors.push(`${product.id}: faltan ventajas`);
   if (!Array.isArray(product.limitations) || !product.limitations.length) errors.push(`${product.id}: faltan limitaciones`);
   if (!Array.isArray(product.sources) || !product.sources.length) errors.push(`${product.id}: faltan fuentes`);
+  if (product.price?.currency === "GTQ" && product.price?.minAmount !== undefined && product.price?.maxAmount !== undefined) {
+    const min = Number(product.price.minAmount);
+    const max = Number(product.price.maxAmount);
+    const amount = Number(product.price.amount);
+    if (!Number.isFinite(min) || !Number.isFinite(max)) errors.push(`${product.id}: rango de precio invalido`);
+    if (min > max) errors.push(`${product.id}: precio minimo mayor que precio maximo`);
+    if (Number.isFinite(min) && Number.isFinite(max) && amount !== Math.round(((min + max) / 2) * 100) / 100) {
+      errors.push(`${product.id}: el valor interno de precio debe ser el punto medio del rango`);
+    }
+  }
 }
 
 for (const [category, count] of Object.entries(expected)) {

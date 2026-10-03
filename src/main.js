@@ -100,6 +100,13 @@ function money(price) {
   if (!price || price.status === "pendiente") return "Precio por confirmar";
   if (String(price.amount).toLowerCase() === "pendiente") return "Precio por confirmar";
   if (String(price.amount).toLowerCase() === "varía") return "Precio variable";
+  if (price.currency === "GTQ" && Number.isFinite(Number(price.minAmount)) && Number.isFinite(Number(price.maxAmount))) {
+    const min = Number(price.minAmount);
+    const max = Number(price.maxAmount);
+    const format = (value) => `Q ${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (min === max) return format(min);
+    return `${format(min)} – ${format(max)}`;
+  }
   if (price.currency === "GTQ") {
     const numeric = Number(String(price.amount).replaceAll(",", ""));
     if (Number.isFinite(numeric)) return `Q ${numeric.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -434,6 +441,40 @@ function specTable(specs) {
   return `<dl class="spec-list">${specs.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl>`;
 }
 
+function referenceStoreText(price) {
+  return String(price.suggestedStores || "")
+    .split("/")
+    .map((item) => item.trim())
+    .filter((item) => item && !/importaci[oó]n directa/i.test(item))
+    .join(" / ");
+}
+
+function referenceModality(price) {
+  return /importaci[oó]n directa/i.test(String(price.suggestedStores || "")) ? "Importación directa" : "";
+}
+
+function productPriceNote(product) {
+  if (Number(product.price?.minAmount) === Number(product.price?.maxAmount)) {
+    return "Precio estimado. Puede variar según tienda y configuración.";
+  }
+  return product.price.note;
+}
+
+function productPricePanel(product) {
+  const stores = referenceStoreText(product.price);
+  const modality = referenceModality(product.price);
+  return `
+    <article class="panel">
+      <h2>Precio</h2>
+      <p class="price">${escapeHtml(money(product.price))}</p>
+      <p><strong>Mercado de referencia:</strong> Guatemala</p>
+      <p><strong>Tiendas de referencia:</strong> ${escapeHtml(stores || "No especificado")}</p>
+      ${modality ? `<p><strong>Modalidad de referencia:</strong> ${escapeHtml(modality)}</p>` : ""}
+      <p>${escapeHtml(productPriceNote(product))}</p>
+    </article>
+  `;
+}
+
 function renderProduct(id) {
   const product = byId(id);
   if (!product) return layout(`<section class="empty-state"><h1>Ficha no encontrada</h1>${link("#/catalogo", "Volver al catálogo", "button")}</section>`);
@@ -450,7 +491,7 @@ function renderProduct(id) {
     </section>
     <section class="detail-grid">
       <article class="panel"><h2>Características</h2>${specTable(product.specs)}</article>
-      <article class="panel"><h2>Precio</h2><p class="price">${escapeHtml(money(product.price))}</p><p><strong>Mercado:</strong> ${escapeHtml(product.price.market)}</p><p><strong>Fuente:</strong> ${product.price.sourceUrl ? `<a href="${product.price.sourceUrl}" target="_blank" rel="noreferrer">${escapeHtml(product.price.sourceName)}</a>` : escapeHtml(product.price.sourceName)}</p><p>${escapeHtml(product.price.note)}</p></article>
+      ${productPricePanel(product)}
       <article class="panel"><h2>Ventajas</h2><ul>${product.advantages.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></article>
       <article class="panel"><h2>Limitaciones</h2><ul>${product.limitations.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></article>
       <article class="panel wide"><h2>Uso recomendado</h2><p>${escapeHtml(product.recommendedUse)}</p></article>
@@ -465,6 +506,31 @@ function compareSelect(id, label, value, options) {
 
 function specValue(product, label) {
   return product?.specs.find(([key]) => key === label)?.[1] || "";
+}
+
+function priceBounds(product) {
+  const price = product?.price;
+  if (!price) return null;
+  const min = Number.isFinite(Number(price.minAmount)) ? Number(price.minAmount) : Number(price.amount);
+  const max = Number.isFinite(Number(price.maxAmount)) ? Number(price.maxAmount) : Number(price.amount);
+  if (!Number.isFinite(min) || !Number.isFinite(max)) return null;
+  return { min, max };
+}
+
+function priceComparisonText(a, b) {
+  const aBounds = priceBounds(a);
+  const bBounds = priceBounds(b);
+  if (!aBounds || !bBounds) return "";
+  if (aBounds.max < bBounds.min) {
+    return `Precio: el rango de ${a.brand} ${a.model} queda por debajo del rango de ${b.brand} ${b.model}.`;
+  }
+  if (bBounds.max < aBounds.min) {
+    return `Precio: el rango de ${b.brand} ${b.model} queda por debajo del rango de ${a.brand} ${a.model}.`;
+  }
+  if (aBounds.min === bBounds.min && aBounds.max === bBounds.max) {
+    return "Precio: ambos productos tienen el mismo rango de referencia.";
+  }
+  return "Precio: los rangos se superponen; ninguno es siempre más barato dentro de la referencia mostrada.";
 }
 
 function compareHighlights(a, b, labels) {
@@ -493,8 +559,10 @@ function compareHighlights(a, b, labels) {
     .map((label) => ({ label, aValue: specValue(a, label), bValue: specValue(b, label) }))
     .filter(({ aValue, bValue }) => aValue && bValue && aValue !== bValue)
     .slice(0, 4);
+  const priceText = priceComparisonText(a, b);
   if (!differences.length) {
-    return `<p class="compare-summary">Estos dos productos comparten las características principales documentadas; revisa precio, uso recomendado y disponibilidad antes de decidir.</p>`;
+    const summary = [priceText, "Estos dos productos comparten las características principales documentadas; revisa uso recomendado y disponibilidad antes de decidir."].filter(Boolean).join(" ");
+    return `<p class="compare-summary">${escapeHtml(summary)}</p>`;
   }
   const details = differences
     .map(({ label, aValue, bValue }) => `${label}: ${a.brand} ${a.model} indica ${aValue}; ${b.brand} ${b.model} indica ${bValue}.`)
@@ -503,7 +571,7 @@ function compareHighlights(a, b, labels) {
     a.category === b.category
       ? "Resumen de diferencias relevantes:"
       : "Resumen entre categorías distintas; se comparan solo aspectos compatibles:";
-  return `<p class="compare-summary">${escapeHtml(context)} ${escapeHtml(details)}</p>`;
+  return `<p class="compare-summary">${escapeHtml([context, priceText, details].filter(Boolean).join(" "))}</p>`;
 }
 
 function applyCompareQuery() {
