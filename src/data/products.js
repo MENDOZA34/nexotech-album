@@ -133,10 +133,10 @@ const providedPriceRanges = Object.fromEntries(
     ["tablet-ipad-pro-11-m4", 9800, 11500, "iShop Guatemala / Pacifiko"],
     ["tablet-galaxy-tab-s10-ultra", 10500, 12200, "Kemik Guatemala"],
     ["tablet-surface-pro-11", 11000, 13500, "Pacifiko Guatemala"],
-    ["storage-samsung-870-evo", 850, 1050, "Intelaf Guatemala"],
-    ["storage-crucial-mx500", 750, 900, "Intelaf Guatemala"],
-    ["storage-kingston-a400", 320, 420, "Intelaf Guatemala"],
-    ["storage-samsung-990-pro", 1850, 2200, "Pacifiko / Intelaf Guatemala"],
+    ["storage-samsung-870-evo", 3330, 5135, "Intelaf Guatemala"],
+    ["storage-crucial-mx500", 3144, 3860, "Intelaf Guatemala"],
+    ["storage-kingston-a400", 845, 1279, "Intelaf Guatemala"],
+    ["storage-samsung-990-pro", 3850, 7690, "Pacifiko / Intelaf Guatemala", 4510],
     ["storage-wd-sn850x", 1650, 1950, "Intelaf Guatemala"],
     ["storage-crucial-t500", 950, 1150, "Pacifiko Guatemala"],
     ["storage-wd-blue-hdd", 550, 850, "Intelaf Guatemala"],
@@ -145,8 +145,8 @@ const providedPriceRanges = Object.fromEntries(
     ["storage-samsung-t7-shield", 1050, 1300, "Pacifiko Guatemala"],
     ["storage-sandisk-extreme", 1000, 1250, "Intelaf Guatemala"],
     ["storage-seagate-expansion-6tb", 1350, 1650, "Intelaf / Pacifiko Guatemala"],
-    ["component-ram-kingston-fury-beast", 1150, 1400, "Intelaf Guatemala"],
-    ["component-ram-corsair-vengeance", 1200, 1450, "Intelaf Guatemala"],
+    ["component-ram-kingston-fury-beast", 3986, 3986, "Intelaf Guatemala"],
+    ["component-ram-corsair-vengeance", 3901, 3901, "Intelaf Guatemala"],
     ["component-ram-crucial-pro", 1000, 1200, "Pacifiko Guatemala"],
     ["component-cpu-ryzen-7800x3d", 3800, 4400, "Intelaf Guatemala"],
     ["component-cpu-core-ultra-7-265k", 3900, 4500, "Intelaf Guatemala"],
@@ -196,9 +196,12 @@ const providedPriceRanges = Object.fromEntries(
     ["dev-arduino-uno-r4-wifi", 280, 380, "Kemik Guatemala"],
     ["dev-arduino-nano-esp32", 220, 300, "Kemik Guatemala"],
     ["dev-arduino-mega-2560", 350, 480, "Kemik Guatemala"],
-  ].map(([id, minAmount, maxAmount, suggestedStores]) => [
+  ].map(([id, minAmount, maxAmount, suggestedStores, providedIntermediateAmount]) => [
     id,
-    referenceRangePrice(minAmount, maxAmount, suggestedStores),
+    {
+      ...referenceRangePrice(minAmount, maxAmount, suggestedStores),
+      ...(providedIntermediateAmount ? { providedIntermediateAmount } : {}),
+    },
   ])
 );
 
