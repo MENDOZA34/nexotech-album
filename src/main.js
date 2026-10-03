@@ -145,13 +145,6 @@ function productMedia(product, variant = "card") {
   return productVisual(product, variant);
 }
 
-function imageCredit(product) {
-  const imageState = getImageState(product);
-  if (imageState.verified) return product.image.credit;
-  if (imageState.linkedPending) return `${product.image.credit} Permiso de reutilización pendiente.`;
-  return product.image?.credit || "Visual generado por categoría. No es una fotografía del modelo.";
-}
-
 function link(href, label, className = "") {
   return `<a class="${className}" href="${href}">${label}</a>`;
 }
@@ -254,13 +247,11 @@ function favoriteButton(product, extraClass = "") {
 }
 
 function productCard(product) {
-  const imageState = getImageState(product);
   return `
     <article class="product-card">
       <a class="product-media" href="#/producto/${product.id}" aria-label="Abrir ficha de ${escapeHtml(product.brand)} ${escapeHtml(product.model)}">
         ${productMedia(product)}
         <span class="status-stack">
-          ${imageState.pending ? `<span class="status-chip">Sin foto verificada</span>` : ""}
           ${product.price.status === "pendiente" ? `<span class="status-chip muted-chip">Precio por confirmar</span>` : ""}
         </span>
       </a>
@@ -480,12 +471,12 @@ function renderProduct(id) {
   if (!product) return layout(`<section class="empty-state"><h1>Ficha no encontrada</h1>${link("#/catalogo", "Volver al catálogo", "button")}</section>`);
   return layout(`
     <section class="detail-hero">
-      <div class="detail-media">${productMedia(product, "detail")}<p>${escapeHtml(imageCredit(product))}</p></div>
+      <div class="detail-media">${productMedia(product, "detail")}</div>
       <div>
         <p class="eyebrow">${escapeHtml(product.category)} · ${escapeHtml(product.type)}</p>
         <h1>${escapeHtml(product.brand)} ${escapeHtml(product.model)}</h1>
         <p>${escapeHtml(product.description)}</p>
-        <div class="badge-row">${product.range ? `<span>${escapeHtml(product.range)}</span>` : ""}<span>${getImageState(product).showsPhoto ? "Foto enlazada" : "Sin foto verificada"}</span><span>Consulta: ${escapeHtml(product.price.date)}</span></div>
+        <div class="badge-row">${product.range ? `<span>${escapeHtml(product.range)}</span>` : ""}<span>Consulta: ${escapeHtml(product.price.date)}</span></div>
         <div class="hero-actions">${link("#/catalogo", "Volver al catálogo", "button")}${favoriteButton(product)}${link(`#/comparador?tipo=${encodeURIComponent(product.type)}&a=${encodeURIComponent(product.id)}`, "Comparar", "button primary")}</div>
       </div>
     </section>
